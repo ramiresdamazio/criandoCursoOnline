@@ -51,13 +51,46 @@ app.get('/usuarios', async (req, res) => {
     }
 })
 
-app.put('/usuarios/:id', async (req, res) => {
-    const idDoAluno = req.params.id
-    const novosDados = req.body
-
-    const resultado = await User.update(novosDados, {
-        where: { id: idDoAluno }
-    })
+app.get('/usuarios/:id', async (req, res) => {
+    try {
+        const idDoAluno = req.params.id
+        const alunoEncontrado = await User.findByPk(idDoAluno)
+        if (!alunoEncontrado) throw new Error('Aluno não existe')
+        res.status(200).json(alunoEncontrado)
+    } catch (error) {
+        res.status(404).json({ erro: 'falha ao buscar usuario', detalhes: error.message })
+    }
 })
 
+app.put('/usuarios/:id', async (req, res) => {
+    try {
+        const idDoAluno = req.params.id
+
+        const alunoEncontrado = await User.findByPk(idDoAluno)
+
+        if (!alunoEncontrado) throw new Error('Aluno não existe')
+
+        const { nome, email } = req.body
+
+        await alunoEncontrado.update({ nome, email })
+
+        res.status(200).json('Atualizado com sucesso')
+
+    } catch (error) {
+
+        res.status(404).json({ erro: 'falha ao atualizar usuario', detalhes: error.message })
+    }
+})
+
+app.delete('/usuarios/:id', async (req, res) => {
+    try {
+        const idDoAluno = req.params.id
+        const alunoEncontrado = await User.findByPk(idDoAluno)
+        if (!alunoEncontrado) throw new Error('Aluno não existe')
+        await alunoEncontrado.destroy()
+        res.send(alunoEncontrado)
+    } catch (error) {
+        res.status(404).json({ erro: 'falha ao apagar usuario', detalhes: error.message })
+    }
+})
 app.listen(3000, () => console.log('servidor na porta http://localhost:3000'))
