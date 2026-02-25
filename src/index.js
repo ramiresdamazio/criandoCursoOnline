@@ -36,9 +36,19 @@ app.post('/usuarios', async (req, res) => {
             nome, email, password
         })
 
+
         res.status(201).json(novoUsuario)
     } catch (error) {
         res.status(400).json({ erro: 'não foi possivel criar o aluno', detalhes: error.message })
+    }
+})
+
+app.post('/usuarios', (req, res) => {
+    try {
+        const { nome, email, password } = req.body
+        if (!nome) throw new Error('Favor inserir seu nome')
+    } catch (error) {
+        res.status(400).json({ erro: 'favor inserir seu nome' })
     }
 })
 
