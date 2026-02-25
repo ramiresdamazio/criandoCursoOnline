@@ -2,7 +2,8 @@ import express from 'express'
 import 'dotenv/config'
 import sequelize from './db.js'
 import User from './models/user.js'
-
+import { validarDados } from './middlewares/validacao.js'
+import { validarAtualizacao } from './middlewares/validacao.js'
 
 const app = express()
 app.use(express.json())
@@ -20,13 +21,9 @@ try {
     console.log('Problema na conexão com o banco', error)
 }
 
-app.post('/usuarios', async (req, res) => {
+app.post('/usuarios', validarDados, async (req, res) => {
     try {
         const { nome, email, password } = req.body
-
-        if (!nome) throw new Error('Favor inserir seu nome')
-        if (!email) throw new Error('Favor inserir seu email')
-        if (!password) throw new Error('Favor inserir sua senha')
 
         const userAlreadyExists = await User.findOne({ where: { email } })
 
@@ -40,15 +37,6 @@ app.post('/usuarios', async (req, res) => {
         res.status(201).json(novoUsuario)
     } catch (error) {
         res.status(400).json({ erro: 'não foi possivel criar o aluno', detalhes: error.message })
-    }
-})
-
-app.post('/usuarios', (req, res) => {
-    try {
-        const { nome, email, password } = req.body
-        if (!nome) throw new Error('Favor inserir seu nome')
-    } catch (error) {
-        res.status(400).json({ erro: 'favor inserir seu nome' })
     }
 })
 
@@ -72,7 +60,7 @@ app.get('/usuarios/:id', async (req, res) => {
     }
 })
 
-app.put('/usuarios/:id', async (req, res) => {
+app.put('/usuarios/:id', validarAtualizacao, async (req, res) => {
     try {
         const idDoAluno = req.params.id
 
@@ -98,7 +86,7 @@ app.delete('/usuarios/:id', async (req, res) => {
         const alunoEncontrado = await User.findByPk(idDoAluno)
         if (!alunoEncontrado) throw new Error('Aluno não existe')
         await alunoEncontrado.destroy()
-        res.send(alunoEncontrado)
+        res.status(200).json(alunoEncontrado)
     } catch (error) {
         res.status(404).json({ erro: 'falha ao apagar usuario', detalhes: error.message })
     }
