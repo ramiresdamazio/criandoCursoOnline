@@ -17,7 +17,7 @@ export const validarAtualizacao = (req, res, next) => {
     if (email) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
         if (typeof email !== 'string') return res.status(400).json({ erro: 'O email deve ser uma string' })
-        if (emailRegex.test(email)) return res.status(400).json({ erro: 'O email deve ser válido' })
+        if (!emailRegex.test(email)) return res.status(400).json({ erro: 'O email deve ser válido' })
     }
 
     next()

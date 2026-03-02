@@ -1,9 +1,11 @@
 import express from 'express'
 import 'dotenv/config'
 import userRouter from './domains/usuarios/router.js'
+import profRouter from './domains/professores/router.js'
 import sequelize from './db.js'
 const app = express()
 app.use(express.json())
+app.use(profRouter)
 
 try {
     await sequelize.authenticate()
