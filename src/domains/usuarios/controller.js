@@ -1,4 +1,4 @@
-import User from "./model.js"
+import User from "../../models/models.js"
 
 export class UsuariosController {
     async criarUsuario(req, res) {

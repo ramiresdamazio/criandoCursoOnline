@@ -1,9 +1,18 @@
 import express from 'express'
 import 'dotenv/config'
-import userRouter from './usuarios/router.js'
-
+import userRouter from './domains/usuarios/router.js'
+import sequelize from './db.js'
 const app = express()
 app.use(express.json())
+
+try {
+    await sequelize.authenticate()
+    console.log('Deu certo, conectado com sucesso')
+    await sequelize.sync()
+    console.log('tabelas sincronizadas')
+} catch (error) {
+    console.log('Problema na conexão com o banco', error)
+}
 
 app.use(userRouter)
 
