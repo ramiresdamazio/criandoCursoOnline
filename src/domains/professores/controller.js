@@ -14,4 +14,24 @@ export class ProfessoresController {
     } catch(error) {
         res.status(400).json({ erro: 'não foi possivel criar o aluno', detalhes: error.message })
     }
+
+    async listarProfessor(req, res) {
+        try {
+            const professores = await Prof.findAll()
+            res.status(200).json(professores)
+        } catch (error) {
+            res.status(400).json({ erro: 'Falha ao buscar lista de professores', detalhes: error.message })
+        }
+    }
+
+    async buscarProfessor(req, res) {
+        try {
+            const idDoProfessor = req.body.id
+            const professorEncontrado = await Prof.findByPk(idDoProfessor)
+            if (!professorEncontrado) throw new Error('Professor não existe')
+            res.status(200).json(professorEncontrado)
+        } catch (error) {
+            res.status(404).json({ erro: 'falha ao buscar professor', detalhes: error.message })
+        }
+    }
 }

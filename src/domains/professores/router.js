@@ -7,6 +7,8 @@ const profRouter = Router()
 const professoresController = new ProfessoresController()
 
 profRouter.post('/professores', validarDados, professoresController.criarProfessor);
+profRouter.get('/professores', professoresController.listarProfessor)
+profRouter.get('/professores/:id', professoresController.buscarProfessor)
 
 
 export default profRouter;
