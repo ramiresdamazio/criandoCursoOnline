@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Curso Online - Painel</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="layout">
+    <header class="hero">
+      <p class="eyebrow">Painel Admin</p>
+      <h1>Curso Online</h1>
+      <p>Gerencie usuarios e professores pela API Express.</p>
+    </header>
+
+    <section class="card">
+      <h2>Criar Registro</h2>
+      <form id="form-create" class="grid-form">
+        <label>
+          Tipo
+          <select name="tipo" required>
+            <option value="usuarios">Usuario</option>
+            <option value="professores">Professor</option>
+          </select>
+        </label>
+        <label>
+          Nome
+          <input type="text" name="nome" required>
+        </label>
+        <label>
+          Email
+          <input type="email" name="email" required>
+        </label>
+        <label>
+          Senha
+          <input type="password" name="password" required>
+        </label>
+        <button type="submit">Criar</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Listar Registros</h2>
+      <form id="form-list" class="inline-form">
+        <label>
+          Tipo
+          <select name="tipo" required>
+            <option value="usuarios">Usuarios</option>
+            <option value="professores">Professores</option>
+          </select>
+        </label>
+        <button type="submit">Listar</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Buscar por ID</h2>
+      <form id="form-get" class="inline-form">
+        <label>
+          Tipo
+          <select name="tipo" required>
+            <option value="usuarios">Usuario</option>
+            <option value="professores">Professor</option>
+          </select>
+        </label>
+        <label>
+          ID
+          <input type="number" min="1" name="id" required>
+        </label>
+        <button type="submit">Buscar</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Atualizar por ID</h2>
+      <form id="form-update" class="grid-form">
+        <label>
+          Tipo
+          <select name="tipo" required>
+            <option value="usuarios">Usuario</option>
+            <option value="professores">Professor</option>
+          </select>
+        </label>
+        <label>
+          ID
+          <input type="number" min="1" name="id" required>
+        </label>
+        <label>
+          Nome (opcional)
+          <input type="text" name="nome">
+        </label>
+        <label>
+          Email (opcional)
+          <input type="email" name="email">
+        </label>
+        <label>
+          Senha (opcional)
+          <input type="password" name="password">
+        </label>
+        <button type="submit">Atualizar</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Deletar por ID</h2>
+      <form id="form-delete" class="inline-form">
+        <label>
+          Tipo
+          <select name="tipo" required>
+            <option value="usuarios">Usuario</option>
+            <option value="professores">Professor</option>
+          </select>
+        </label>
+        <label>
+          ID
+          <input type="number" min="1" name="id" required>
+        </label>
+        <button type="submit" class="danger">Deletar</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Resposta da API</h2>
+      <pre id="output">Aguardando acao...</pre>
+    </section>
+  </main>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

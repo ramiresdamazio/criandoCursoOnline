@@ -1,0 +1,176 @@
+:root {
+  --bg: #f2f6f5;
+  --surface: #ffffff;
+  --text: #1b2b24;
+  --muted: #5d7269;
+  --primary: #115d4e;
+  --primary-strong: #0b4237;
+  --danger: #b31f2e;
+  --ring: #8cc9ba;
+  --border: #d3dfda;
+  --shadow: 0 14px 34px -22px rgba(9, 25, 20, 0.45);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Avenir Next", "Trebuchet MS", "Lucida Sans Unicode", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 0% 0%, #d5eee6 0, transparent 35%),
+    radial-gradient(circle at 100% 100%, #d7e5f6 0, transparent 40%),
+    var(--bg);
+}
+
+.layout {
+  width: min(1050px, 94vw);
+  margin: 2rem auto 3rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.hero {
+  grid-column: 1 / -1;
+  padding: 1.6rem;
+  background: linear-gradient(120deg, #103c46, #116553 60%, #1a7f6a);
+  color: #f5fffc;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+
+.hero h1 {
+  margin: 0.2rem 0;
+  font-size: clamp(1.55rem, 2.5vw, 2.2rem);
+}
+
+.hero p {
+  margin: 0;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+  font-size: 0.74rem;
+  opacity: 0.9;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: var(--shadow);
+  animation: rise-in 0.45s ease both;
+}
+
+.card h2 {
+  margin: 0 0 0.85rem;
+  font-size: 1.1rem;
+}
+
+form {
+  margin: 0;
+}
+
+.grid-form,
+.inline-form {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.grid-form {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-form button {
+  grid-column: 1 / -1;
+}
+
+.inline-form {
+  grid-template-columns: 1fr auto auto;
+}
+
+label {
+  display: grid;
+  gap: 0.34rem;
+  font-size: 0.87rem;
+  color: var(--muted);
+}
+
+input,
+select,
+button {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  padding: 0.64rem 0.75rem;
+  font-size: 0.95rem;
+}
+
+input:focus,
+select:focus {
+  outline: 2px solid var(--ring);
+  border-color: transparent;
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  background: var(--primary);
+  color: #f4fffd;
+  font-weight: 600;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+button:hover {
+  background: var(--primary-strong);
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+button.danger {
+  background: var(--danger);
+}
+
+#output {
+  margin: 0;
+  min-height: 210px;
+  max-height: 420px;
+  overflow: auto;
+  border-radius: 10px;
+  border: 1px solid #cee4de;
+  background: #f6fbfa;
+  padding: 0.85rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 0.88rem;
+}
+
+@media (max-width: 768px) {
+  .grid-form,
+  .inline-form {
+    grid-template-columns: 1fr;
+  }
+
+  .layout {
+    margin-top: 1rem;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

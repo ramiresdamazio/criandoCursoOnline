@@ -1,5 +1,5 @@
-import User from "../../models/models.js"
-
+import { User } from '../../models/models.js'
+import bcrypt from 'bcrypt'
 export class UsuariosController {
     async criarUsuario(req, res) {
         try {
@@ -9,10 +9,14 @@ export class UsuariosController {
 
             if (userAlreadyExists) throw new Error('Já existe um usuário com esse email')
 
-            const novoUsuario = await User.create({
-                nome, email, password
-            })
+            const senhaHash = await bcrypt.hash(password, 10)
 
+            const novoUsuario = await User.create({
+                nome, email, password: senhaHash
+            })
+            //olhar depois aqui embaixo
+            const { password: _, ...usuarioSemSenha } = novoUsuario.toJSON()
+            res.status(201).json(usuarioSemSenha)
             res.status(201).json(novoUsuario)
         } catch (error) {
             res.status(400).json({ erro: 'não foi possivel criar o aluno', detalhes: error.message })

@@ -1,11 +1,21 @@
 import express from 'express'
 import 'dotenv/config'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import userRouter from './domains/usuarios/router.js'
 import profRouter from './domains/professores/router.js'
 import sequelize from './db.js'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const publicPath = path.resolve(__dirname, '../public')
+
 const app = express()
+
 app.use(express.json())
+app.use(express.static(publicPath))
 app.use(profRouter)
+app.use(userRouter)
 
 try {
     await sequelize.authenticate()
@@ -16,7 +26,6 @@ try {
     console.log('Problema na conexão com o banco', error)
 }
 
-app.use(userRouter)
 
 app.listen(3000, () => console.log('servidor na porta http://localhost:3000'))
 //jwt + bcrypt + migrations
