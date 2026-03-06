@@ -44,12 +44,13 @@ export class UsuariosController {
     async buscarUsuario(req, res) {
         try {
             const idDoAluno = req.params.id
-            const alunoEncontrado = await User.findByPk(idDoAluno)
+            const alunoEncontrado = await User.findByPk(idDoAluno, { attributes: { exclude: ['password'] } })
             if (!alunoEncontrado) throw new Error('Aluno não existe')
             res.status(200).json(alunoEncontrado)
 
         } catch (error) {
-            res.status(409).json({ erro: 'falha ao buscar usuario', detalhes: error.message })
+            console.log(error.message)
+            res.status(500).json({ erro: 'Falha ao processar solicitação' })
         }
     }
 
@@ -61,25 +62,36 @@ export class UsuariosController {
 
             if (!alunoEncontrado) throw new Error('Aluno não existe')
 
-            const data = req.body
+            const { nome, email, password } = req.body
 
-            await alunoEncontrado.update(data)
+            const dadosParaAtualizar = {}
+
+            if (nome) dadosParaAtualizar.nome = nome
+            if (email) dadosParaAtualizar.email = email
+            if (password) {
+                const senhaHash = await bcrypt.hash(password, 10)
+                dadosParaAtualizar.password = senhaHash
+            }
+
+            await alunoEncontrado.update(dadosParaAtualizar)
 
             res.status(200).json('Atualizado com sucesso')
 
         } catch (error) {
-            res.status(404).json({ erro: 'falha ao atualizar usuario', detalhes: error.message })
+            console.log(error.message)
+            res.status(404).json({ erro: 'falha ao atualizar usuario' })
         }
     }
     async deletarUsuario(req, res) {
         try {
             const idDoAluno = req.params.id
-            const alunoEncontrado = await User.findByPk(idDoAluno)
+            const alunoEncontrado = await User.findByPk(idDoAluno, { attributes: { exclude: ['password'] } })
             if (!alunoEncontrado) throw new Error('Aluno não existe')
             await alunoEncontrado.destroy()
             res.status(200).json(alunoEncontrado)
         } catch (error) {
-            res.status(404).json({ erro: 'falha ao apagar usuario', detalhes: error.message })
+            console.log(error.message)
+            res.status(404).json({ erro: 'falha ao apagar usuario' })
         }
     }
 }
