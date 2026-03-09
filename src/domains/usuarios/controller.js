@@ -37,17 +37,21 @@ export class UsuariosController {
 
             res.status(200).json(alunos)
         } catch (error) {
-            res.status(500).json({ erro: 'Falha ao buscar usuários', detalhes: error.message })
+            console.log(error.message)
+            res.status(500).json({ erro: 'Falha ao buscar usuários' })
         }
     }
 
     async buscarUsuario(req, res) {
         try {
-            const idDoAluno = req.params.id
-            const alunoEncontrado = await User.findByPk(idDoAluno, { attributes: { exclude: ['password'] } })
-            if (!alunoEncontrado) throw new Error('Aluno não existe')
-            res.status(200).json(alunoEncontrado)
+            const id = Number(req.params.id)
+            if (Number.isNaN(id)) return res.status(400).json({ erro: 'ID Inválido' })
 
+            const alunoEncontrado = await User.findByPk(id, { attributes: { exclude: ['password'] } })
+
+            if (!alunoEncontrado) return res.status(404).json({ erro: 'usuário não encontrado' })
+
+            res.status(200).json(alunoEncontrado)
         } catch (error) {
             console.log(error.message)
             res.status(500).json({ erro: 'Falha ao processar solicitação' })
@@ -56,11 +60,12 @@ export class UsuariosController {
 
     async atualizarUsuario(req, res) {
         try {
-            const idDoAluno = req.params.id
+            const id = Number(req.params.id)
+            if (Number.isNaN(id)) return res.status(400).json({ erro: 'ID Inválido' })
 
-            const alunoEncontrado = await User.findByPk(idDoAluno)
+            const alunoEncontrado = await User.findByPk(id, { attributes: { exclude: ['password'] } })
 
-            if (!alunoEncontrado) throw new Error('Aluno não existe')
+            if (!alunoEncontrado) return res.status(404).json({ erro: 'usuário não encontrado' })
 
             const { nome, email, password } = req.body
 
@@ -79,19 +84,24 @@ export class UsuariosController {
 
         } catch (error) {
             console.log(error.message)
-            res.status(404).json({ erro: 'falha ao atualizar usuario' })
+            res.status(500).json({ erro: 'falha ao atualizar usuario' })
         }
     }
     async deletarUsuario(req, res) {
         try {
-            const idDoAluno = req.params.id
-            const alunoEncontrado = await User.findByPk(idDoAluno, { attributes: { exclude: ['password'] } })
-            if (!alunoEncontrado) throw new Error('Aluno não existe')
+            const id = Number(req.params.id)
+            if (Number.isNaN(id)) return res.status(400).json({ erro: 'ID Inválido' })
+
+            const alunoEncontrado = await User.findByPk(id, { attributes: { exclude: ['password'] } })
+
+            if (!alunoEncontrado) return res.status(404).json({ erro: 'usuário não encontrado' })
+
             await alunoEncontrado.destroy()
-            res.status(200).json(alunoEncontrado)
+            res.status(204).json()
+
         } catch (error) {
             console.log(error.message)
-            res.status(404).json({ erro: 'falha ao apagar usuario' })
+            res.status(500).json({ erro: 'falha ao apagar usuario' })
         }
     }
 }

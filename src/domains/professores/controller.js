@@ -2,13 +2,24 @@ import { Prof } from '../../models/models.js'
 
 export class ProfessoresController {
     async criarProfessor(req, res) {
-        const { nome, email, password } = req.body
         try {
+            const { nome, email, password } = req.body
+
+            if (!nome || nome.trim() === "") return res.status(400).json({
+                erro: 'O nome precisa ser preenchido'
+            })
+            if (!email || email.trim() === "") return res.status(400).json({
+                erro: 'O email precisa ser preenchido'
+            })
+            if (!password || password.trim() === "") return res.status(400).json({ erro: 'O passowrd precisa ser preenchido' })
+
             const userAlreadyExists = await Prof.findOne({ where: { email } })
 
-            if (userAlreadyExists) throw new Error('Ja existe um professor cadastrado com esse email')
+            if (userAlreadyExists) return res.status(409).json({ erro: 'Ja existe um professor cadastrado' })
 
-            const novoProfessor = await Prof.create({ nome, email, password })
+            const senhaHash = await bcrypt.hash(password, 10)
+
+            const novoProfessor = await Prof.create({ nome, email, password: senhaHash })
             res.status(201).json(novoProfessor)
 
         } catch (error) {
