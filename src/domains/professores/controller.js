@@ -42,12 +42,7 @@ export class ProfessoresController {
 
     async buscarProfessor(req, res) {
         try {
-            const id = Number(req.params.id)
-            if (Number.isNaN(id)) return res.status(400).json({ erro: 'ID Inválido' })
-
-            const professorEncontrado = await Prof.findByPk(id, { attributes: { exclude: ['password'] } })
-
-            if (!professorEncontrado) return res.status(404).json({ erro: 'Professor não existe' })
+            const professorEncontrado = req.professorLocalizado
             res.status(200).json(professorEncontrado)
         } catch (error) {
             console.log(error.message)
@@ -57,13 +52,16 @@ export class ProfessoresController {
 
     async atualizarProfessor(req, res) {
         try {
-            const id = Number(req.params.id)
-            if (Number.isNaN(id)) return res.status(400).json({ erro: 'ID Inválido' })
-
-            const professorEncontrado = await Prof.findByPk(id, { attributes: { exclude: ['password'] } })
-            if (!professorEncontrado) return res.status(404).json({ erro: 'Professor não existe' })
-
             const { nome, email, password } = req.body
+
+            const professorEncontrado = req.professorLocalizado
+
+            if (email) {
+                const emailAlreadyExists = await Prof.findOne({ where: { email } })
+
+                if (emailAlreadyExists && emailAlreadyExists.id !== professorEncontrado.id) return res.status(409).json({ erro: 'esse email ja está em uso por outro professor' })
+            }
+
             const dadosParaAtualizar = {}
             if (nome) dadosParaAtualizar.nome = nome
             if (email) dadosParaAtualizar.email = email
@@ -83,13 +81,7 @@ export class ProfessoresController {
 
     async deletarProfessor(req, res) {
         try {
-            const id = Number(req.params.id)
-            if (Number.isNaN(id)) return res.status(400).json({ erro: 'ID Inválido' })
-
-            const professorEncontrado = await Prof.findByPk(id, { attributes: { exclude: ['password'] } })
-
-            if (!professorEncontrado) return res.status(404).json({ erro: 'Professor não encontrado ' })
-
+            const professorEncontrado = req.professorLocalizado
             await professorEncontrado.destroy()
             res.status(204).json()
         } catch (error) {
