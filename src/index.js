@@ -4,6 +4,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import userRouter from './domains/usuarios/router.js'
 import profRouter from './domains/professores/router.js'
+import adminRouter from './domains/auth/router.js'
 import sequelize from './db.js'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -16,6 +17,7 @@ app.use(express.json())
 app.use(express.static(publicPath))
 app.use(profRouter)
 app.use(userRouter)
+app.use(adminRouter)
 
 try {
     await sequelize.authenticate()
