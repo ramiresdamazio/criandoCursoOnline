@@ -8,13 +8,11 @@ import { authAdmin } from '../../middlewares/authAdmin.js';
 const profRouter = Router()
 const professoresController = new ProfessoresController()
 
-profRouter.use(authAdmin)
-
-profRouter.post('/professores', validarDados, professoresController.criarProfessor);
-profRouter.get('/professores', professoresController.listarProfessor)
-profRouter.get('/professores/:id', validarIdProfessor, professoresController.buscarProfessor)
-profRouter.put('/professores/:id', validarIdProfessor, professoresController.atualizarProfessor)
-profRouter.delete('/professores/:id', validarIdProfessor, professoresController.deletarProfessor)
+profRouter.post('/professores', authAdmin, validarDados, professoresController.criarProfessor);
+profRouter.get('/professores', authAdmin, professoresController.listarProfessor)
+profRouter.get('/professores/:id', authAdmin, validarIdProfessor, professoresController.buscarProfessor)
+profRouter.put('/professores/:id', authAdmin, validarIdProfessor, professoresController.atualizarProfessor)
+profRouter.delete('/professores/:id', authAdmin, validarIdProfessor, professoresController.deletarProfessor)
 
 
 export default profRouter;
